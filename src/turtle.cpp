@@ -3,6 +3,12 @@
 #include "turtle.h"
 using namespace std;
 
+Turtle::Turtle()
+{
+	yaw = 0;
+	color = Color(0, 0, 0);
+	is_cloak = false;
+}
 Turtle::Turtle(Point _pos)
 {
 	pos = _pos;

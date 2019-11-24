@@ -4,6 +4,7 @@
 class Turtle
 {
 public:
+	Turtle();
 	Turtle(Point _pos);
 	Point getPosition() const;
 	Point move(int dist);
