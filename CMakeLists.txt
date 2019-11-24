@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(logo)
+aux_source_directory(src SRC_LIST)
+include_directories(include)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+add_executable(dummy ${SRC_LIST})

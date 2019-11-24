@@ -1,6 +1,8 @@
 #ifndef _LOGO_SURFACE_H
 #define _LOGO_SURFACE_H
+#include <string>
 #include "base.h"
+using namespace std;
 class Surface
 {
 public:

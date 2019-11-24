@@ -23,7 +23,7 @@ Point Turtle::move(int dist)
 	return pos;
 }
 
-int Turtle::geYaw() const
+int Turtle::getYaw() const
 {
 	return yaw;
 }
@@ -42,7 +42,7 @@ void Turtle::setColor(Color _color)
 	color = _color;
 	is_cloak = false;
 }
-void Turtle::cloak() const
+void Turtle::cloak()
 {
 	is_cloak = true;
 }
