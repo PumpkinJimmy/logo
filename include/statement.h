@@ -6,46 +6,64 @@ using namespace std;
 class Statement
 {
 public:
-	Statement();
+	Statement(){}
 	virtual void execute(Context& context, const vector<string>& items) = 0;
+	virtual ~Statement(){}
 };
 class DefStatement: public Statement
 {
 public:
-	DefStatement();
-	virtual void execute(Context& context, const vector<string>& items);
+	DefStatement(){}
+	virtual void execute(Context& context, const vector<string>& items) override;
+	virtual ~DefStatement(){}
 };
 
 class AddStatement: public Statement
 {
 public:
-	AddStatement();
-	virtual void execute(Context& context, const vector<string>& items);
+	AddStatement(){}
+	virtual void execute(Context& context, const vector<string>& items) override;
+	virtual ~AddStatement(){}
 };
 
 class MoveStatement: public Statement
 {
 public:
-	MoveStatement();
+	MoveStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
 
 class TurnStatement: public Statement
 {
 public:
-	TurnStatement();
+	TurnStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
-#endif
 class ColorStatement: public Statement
 {
 public:
-	ColorStatement();
+	ColorStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
 class CloakStatement: public Statement
 {
 public:
-	CloakStatement();
+	CloakStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
+class LoopStatement: public Statement
+{
+	LoopStatement(){}
+	virtual void execute(Context& context, const vector<string>& items);
+};
+class FuncStatement: public Statement
+{
+	FuncStatement(){}
+	virtual void execute(Context& context, const vector<string>& items);
+};
+class CallStatement: public Statement
+{
+	CallStatement(){}
+	virtual void execute(Context& context, const vector<string>& items);
+};
+#endif

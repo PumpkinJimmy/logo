@@ -2,6 +2,7 @@
 #include <cctype>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "interpreter.h"
 #include "surface.h"
 using namespace std;
@@ -32,7 +33,7 @@ void Interpreter::split(string& s, char c, vector<string>& items)
 	int lpos = 0, pos = 0;
 	while (lpos < s.size() && (pos = s.find(c, lpos)) != string::npos)
 	{
-		items.push_back(s.substr(lpos, pos - lpos));
+		if (pos - lpos > 0) items.push_back(s.substr(lpos, pos - lpos));
 		lpos = pos + 1;
 	}
 	if (lpos < s.size()) items.push_back(s.substr(lpos));
@@ -41,6 +42,8 @@ void Interpreter::init(int width, int height, Color color, Point pos)
 {
 	context.turtle = Turtle(pos);
 	context.surface->create(width, height, color);
+	context.ir = 0;
+	context.in_func_def = false;
 }
 void Interpreter::interprete(const string& line)
 {
@@ -53,12 +56,8 @@ void Interpreter::interprete(const string& line)
 		throw "Unknown Command";
 	mp_statement[cmd]->execute(context, items);
 }
-void Interpreter::run(const string& code, const string& filename)
+void Interpreter::run(const string& filename)
 {
-	int pos = 0, lpos = 0;
-	string codecp = code;
-	strip(codecp);
-	split(codecp, '\n', lines);
 	string line;
 	vector<string> items;
 	int width, height; Color color; Point p;
@@ -89,13 +88,47 @@ void Interpreter::run(const string& code, const string& filename)
 		}
 	}
 	init(width, height, color, p);
-	for (auto line: lines)
+	while (context.ir < lines.size())
 	{
-		interprete(line);
+		interprete(lines[context.ir]);
 	}
 	output(filename);
+}
+
+
+void Interpreter::run(const vector<string>& _lines, const string& filename)
+{
+	lines = _lines;
+	run(filename);
+}
+void Interpreter::run(const string& code, const string& filename)
+{
+	int pos = 0, lpos = 0;
+	string codecp = code;
+	strip(codecp);
+	split(codecp, '\n', lines);
+	run(filename);
+}
+void Interpreter::runFromFile(const string& code_file, const string& filename)
+{
+	ifstream fin(code_file);
+	string tmp;
+	while (!fin.eof())
+	{
+		getline(fin, tmp);
+		strip(tmp);
+		if (!tmp.empty())
+		{
+			lines.push_back(tmp);
+		}
+	}
+	run(filename);
 }
 void Interpreter::output(const string& filename)
 {
 	context.surface->save(filename);
+}
+void Interpreter::addStatement(const string& text, Statement* statement)
+{
+	mp_statement[text] = statement;
 }
