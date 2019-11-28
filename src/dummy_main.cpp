@@ -12,6 +12,9 @@ int main(int argc, char** argv)
 	ipt.addStatement("TURN", new TurnStatement);
 	ipt.addStatement("COLOR", new ColorStatement);
 	ipt.addStatement("CLOAK", new CloakStatement);
+	ipt.addStatement("PRINT", new PrintStatement);
+	ipt.addStatement("LOOP", new LoopStatement);
+	ipt.addStatement("END", new EndStatement);
 	try
 	{
 		if (argc < 2) throw "No source code filename provided";

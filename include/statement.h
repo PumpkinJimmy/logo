@@ -51,19 +51,34 @@ public:
 	CloakStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
+class PrintStatement: public Statement
+{
+public:
+	PrintStatement(){}
+	virtual void execute(Context& context, const vector<string>& items);
+};
 class LoopStatement: public Statement
 {
+public:
 	LoopStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
 class FuncStatement: public Statement
 {
+public:
 	FuncStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
 class CallStatement: public Statement
 {
+public:
 	CallStatement(){}
+	virtual void execute(Context& context, const vector<string>& items);
+};
+class EndStatement: public Statement
+{
+public:
+	EndStatement(){}
 	virtual void execute(Context& context, const vector<string>& items);
 };
 #endif
