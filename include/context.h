@@ -12,8 +12,10 @@ struct Context
 	Turtle turtle;
 	stack<int> loopcnts;
 	stack<int> looppos;
+	stack<int> callpos;
 	map<string, int> vars;//table of vars
 	map<string, int> funcs;//table of the start lineno of funcs
+	map<string, vector<string>> args;
 	int ir;
 	bool in_func_def;
 };

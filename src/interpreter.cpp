@@ -54,7 +54,13 @@ void Interpreter::interprete(const string& line)
 	string cmd = items[0]; items.erase(items.begin());
 	if (!mp_statement.count(cmd))
 		throw "Unknown Command";
-	mp_statement[cmd]->execute(context, items);
+	if (context.in_func_def)
+		if (line == "END FUNC")
+			mp_statement[cmd]->execute(context, items);
+		else
+			context.ir++;
+	else
+		mp_statement[cmd]->execute(context, items);
 }
 void Interpreter::run(const string& filename)
 {
