@@ -149,7 +149,7 @@ void FuncStatement::execute(Context& context, const vector<string>& items)
 	if (context.funcs.count(func_name))
 		throw "Redefined funtion";
 	vector<string> args;
-	split(items[0].substr(lpos + 1, items[0].size() - lpos - 1), ',', args);
+	split(items[0].substr(lpos + 1, items[0].size() - lpos - 2), ',', args);
 	context.funcs[func_name] = context.ir;
 	context.args[func_name] = args;
 	context.in_func_def = true;
@@ -163,10 +163,11 @@ void CallStatement::execute(Context& context, const vector<string>& items)
 	if (lpos == string::npos)
 		throw "Invalid usage of FUNC";
 	string func_name = items[0].substr(0, lpos);
-	if (context.funcs.count(items[0]) == 0)
-		throw "Unknown function all";
+	if (context.funcs.count(func_name) == 0)
+		throw "Unknown function call";
 	vector<string> args;
-	split(items[0].substr(lpos + 1, items[0].size() - lpos - 1), ',', args);
+	string arg_line = items[0].substr(lpos + 1, items[0].size() - lpos - 2);
+	split(arg_line, ',', args);
 	if (args.size() != context.args[func_name].size())
 		throw "Function arguments count error";
 	for (int i = 0; i < args.size(); i++)
