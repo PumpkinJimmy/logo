@@ -44,6 +44,7 @@ void Interpreter::init(int width, int height, Color color, Point pos)
 	context.surface->create(width, height, color);
 	context.ir = 0;
 	context.in_func_def = false;
+	context.vars.push(map<string, int>());
 }
 void Interpreter::interprete(const string& line)
 {

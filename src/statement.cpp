@@ -8,17 +8,23 @@
 #include "statement.h"
 using namespace std;
 void split(const string& s, char c, vector<string>& items);
-
+int& getVar(Context& context, const string& name)
+{
+	map<string, int>& mp_var = context.vars.top();
+	if (mp_var.count(name) == 0)
+		throw "Undefined variable";
+	return mp_var[name];
+}
 
 void DefStatement::execute(Context& context, const vector<string>& items)
 {
 	if (items.size() != 2)
 		throw "Invalid usage of DEF";
-	if (context.vars.count(items[0]) != 0)
+	if (context.vars.top().count(items[0]) != 0)
 		throw (string("Redefined variable: ") + items[0]).c_str();
 	if (isdigit(items[0][0]) || items[0].find(',') != string::npos)
 		throw "Invalid variable name";
-	context.vars[items[0]] = atoi(items[1].c_str());
+	context.vars.top()[items[0]] = atoi(items[1].c_str());
 	context.ir += 1;
 }
 
@@ -26,9 +32,7 @@ void AddStatement::execute(Context& context, const vector<string>& items)
 {
 	if (items.size() != 2)
 		throw "Invalid usage of ADD";
-	if (context.vars.count(items[0]) == 0)
-		throw (string("Undefined variable: ") + items[0]).c_str();
-	context.vars[items[0]] += atoi(items[1].c_str());
+	getVar(context, items[0]) += atoi(items[1].c_str());
 	context.ir += 1;
 }
 
@@ -76,7 +80,7 @@ void PrintStatement::execute(Context& context, const vector<string>& items)
 	}
 	else
 	{
-		printf("%d\n", context.vars[items[0]]);
+		printf("%d\n", context.vars.top()[items[0]]);
 	}
 	context.ir++;
 }
@@ -130,6 +134,7 @@ void EndStatement::execute(Context& context, const vector<string>& items)
 		}
 		if (context.callpos.empty())
 			throw "Invalid usage of END FUNC";
+		context.vars.pop();
 		context.ir = context.callpos.top() + 1; context.callpos.pop();
 	}
 	else
@@ -170,19 +175,21 @@ void CallStatement::execute(Context& context, const vector<string>& items)
 	split(arg_line, ',', args);
 	if (args.size() != context.args[func_name].size())
 		throw "Function arguments count error";
+	map<string, int> locals;
 	for (int i = 0; i < args.size(); i++)
 	{
 		if (isdigit(args[i][0]))
 		{
-			context.vars[context.args[func_name][i]] = atoi(args[i].c_str());
+			context.vars.top()[context.args[func_name][i]] = atoi(args[i].c_str());
 		}
 		else
 		{
-			if (context.vars.count(args[i]) == 0)
+			if (context.vars.top().count(args[i]) == 0)
 				throw "Undefined variable";
-			context.vars[context.args[func_name][i]] = context.vars[args[i]];
+			locals[context.args[func_name][i]] = context.vars.top()[args[i]];
 		}
 	}
+	context.vars.push(locals);
 	context.callpos.push(context.ir);
-	context.ir = context.funcs[items[0]] + 1;
+	context.ir = context.funcs[func_name] + 1;
 }
