@@ -1,0 +1,34 @@
+#include <iostream>
+#include <fstream>
+#include "interpreter.h"
+#include "statement.h"
+#include "png_surface.h"
+using namespace std;
+int main(int argc, char** argv)
+{
+	Interpreter ipt(new PngSurface);
+	ipt.addStatement("DEF", new DefStatement);
+	ipt.addStatement("ADD", new AddStatement);
+	ipt.addStatement("MOVE", new MoveStatement);
+	ipt.addStatement("TURN", new TurnStatement);
+	ipt.addStatement("COLOR", new ColorStatement);
+	ipt.addStatement("CLOAK", new CloakStatement);
+	ipt.addStatement("PRINT", new PrintStatement);
+	ipt.addStatement("LOOP", new LoopStatement);
+	ipt.addStatement("END", new EndStatement);
+	ipt.addStatement("FUNC", new FuncStatement);
+	ipt.addStatement("CALL", new CallStatement);
+	try
+	{
+		if (argc < 2) throw "No source code filename provided";
+		//ipt.run("@SIZE 800 600\n@BACKGROUND 0 0 255\n@POSITION 0 0\nDEF a 1\nDEF b 2\nADD a 1\nADD b -3", "a.bmp");
+		ipt.runFromFile(argv[1], "a.png");
+
+	}
+	catch (const char* e)
+	{
+		cout << e << endl;
+	}
+	return 0;
+
+}

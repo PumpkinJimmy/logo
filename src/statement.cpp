@@ -42,7 +42,10 @@ void MoveStatement::execute(Context& context, const vector<string>& items)
 		throw "Invalid usage of MOVE";
 	Point st = context.turtle.getPosition();
 	Point ed = context.turtle.move(atoi(items[0].c_str()));
-	context.surface->drawLine(st, ed, context.turtle.getColor());
+	if (!context.turtle.isCloak())
+	{
+		context.surface->drawLine(st, ed, context.turtle.getColor());
+	}
 	context.ir += 1;
 }
 void TurnStatement::execute(Context& context, const vector<string>& items)

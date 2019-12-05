@@ -48,6 +48,11 @@ void Turtle::setColor(Color _color)
 	color = _color;
 	is_cloak = false;
 }
+
+bool Turtle::isCloak() const
+{
+	return is_cloak;
+}
 void Turtle::cloak()
 {
 	is_cloak = true;

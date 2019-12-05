@@ -12,6 +12,7 @@ public:
 	void turn(int dyaw);
 	Color getColor() const;
 	void setColor(Color _color);
+	bool isCloak() const;
 	void cloak();
 private:
 	Point pos;
