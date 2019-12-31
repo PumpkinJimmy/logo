@@ -16,6 +16,6 @@ public:
 private:
 	PngSurface(const PngSurface&);
 	PngSurface& operator=(const PngSurface&);
-	char** data;
+	unsigned char** data;
 };
 #endif

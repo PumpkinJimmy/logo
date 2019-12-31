@@ -17,15 +17,15 @@ void PngSurface::create(int _width, int _height, Color _bgcolor)
 {
 	width = _width;
 	height = _height;
-	data = new char* [height];
+	data = new unsigned char* [height];
 	for (int i = 0; i < height; i++)
 	{
-		data[i] = new char[width * 3];
+		data[i] = new unsigned char[width * 3];
 		for (int j = 0; j < width; j++)
 		{
-			data[i][3 * j] = _bgcolor.b;
+			data[i][3 * j] = _bgcolor.r;
 			data[i][3 * j + 1] = _bgcolor.g;
-			data[i][3 * j + 2] = _bgcolor.r;
+			data[i][3 * j + 2] = _bgcolor.b;
 		}
 	}
 }
@@ -43,11 +43,15 @@ void PngSurface::drawLine(Point st, Point ed, Color color)
 {
 	if (st.y == ed.y)
 	{
-		for (int i = st.x; i <= ed.x; i++)
+		int stx = st.x, edx = ed.x;
+		if (stx > edx) swap(stx, edx);
+		if (stx < 0) stx = 0;
+		if (edx > width - 1) edx = width - 1;
+		for (int i = stx; i <= edx; i++)
 		{
-			data[st.y][3 * i] = color.b;
+			data[st.y][3 * i] = color.r;
 			data[st.y][3 * i + 1] = color.g;
-			data[st.y][3 * i + 2] = color.r;
+			data[st.y][3 * i + 2] = color.b;
 		}
 	}
 	else
@@ -55,13 +59,17 @@ void PngSurface::drawLine(Point st, Point ed, Color color)
 		//x = my + n
 		double m = (ed.x - st.x) / double(ed.y - st.y);
 		double n = st.x - m * st.y;
-
-		for (int i = st.y; i <= ed.y; i++)
+		int sty = st.y, edy = ed.y;
+		if (sty > edy) swap(sty, edy);
+		if (sty < 0) sty = 0;
+		if (edy > height - 1) edy = height - 1;
+		for (int i = sty; i <= edy; i++)
 		{
 			int xi = int(m * i + n + 0.5); 
-			data[i][3 * xi] = color.b;
+			if (xi < 0 || xi > width - 1) continue;
+			data[i][3 * xi] = color.r;
 			data[i][3 * xi + 1] = color.g;
-			data[i][3 * xi + 2] = color.r;
+			data[i][3 * xi + 2] = color.b;
 		}
 	}
 }

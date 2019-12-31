@@ -59,7 +59,7 @@ void ColorStatement::execute(Context& context, const vector<string>& items)
 {
 	if (items.size() != 3)
 		throw "Invalid usage of COLOR";
-	context.turtle.setColor(Color(atoi(items[0].c_str()), atoi(items[0].c_str()), atoi(items[0].c_str())));
+	context.turtle.setColor(Color(atoi(items[0].c_str()), atoi(items[1].c_str()), atoi(items[2].c_str())));
 	context.ir += 1;
 }
 
