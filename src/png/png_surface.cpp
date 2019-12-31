@@ -43,6 +43,7 @@ void PngSurface::drawLine(Point st, Point ed, Color color)
 {
 	if (st.y == ed.y)
 	{
+		if (st.y > height - 1 || st.y < 0) return;
 		int stx = st.x, edx = ed.x;
 		if (stx > edx) swap(stx, edx);
 		if (stx < 0) stx = 0;
